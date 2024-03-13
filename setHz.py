@@ -14,6 +14,13 @@ import win32api
 # coordinatesHz75 = X: 1470, Y: 634 / 1493, Y: 742
 # keepChanges = X: 936, Y: 613
 
+def getHzStatus():
+    device = win32api.EnumDisplayDevices(None, 0)
+    settings = win32api.EnumDisplaySettings(device.DeviceName, -1)
+    refresh_rate = settings.DisplayFrequency
+    print(f"Current Refresh Rate: {refresh_rate}Hz")
+
+
 def setHz(HzX, HzY):
     command = "start ms-settings:display-advanced"
     subprocess.run(["powershell", "-Command", command])
@@ -45,6 +52,9 @@ elif choice == "a": # 75Hz
     time.sleep(1)
     keyboard.press_and_release("alt+F4")
     exit()
+
+elif choice == "s":
+    getHzStatus()
 
 elif choice == "q":
     exit()
