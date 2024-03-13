@@ -3,7 +3,7 @@ import subprocess
 import time
 import keyboard
 import win32api
-
+import win32con
 
 # x, y = pyautogui.position()
 # print(f"Current Cursor Position - X: {x}, Y: {y}")
@@ -14,11 +14,28 @@ import win32api
 # coordinatesHz75 = X: 1470, Y: 634 / 1493, Y: 742
 # keepChanges = X: 936, Y: 613
 
+deviceName = r"\\.\DISPLAY2"
+
 def getHzStatus():
-    device = win32api.EnumDisplayDevices(None, 0)
-    settings = win32api.EnumDisplaySettings(device.DeviceName, -1)
+    settings = win32api.EnumDisplaySettings(deviceName, -1)
     refresh_rate = settings.DisplayFrequency
     print(f"Current Refresh Rate: {refresh_rate}Hz")
+
+
+def setHz02(refresh_rate):
+    # device = win32api.EnumDisplayDevices(None, 0)
+    # print(device.DeviceName)
+    # if device.DeviceName:
+    devmode = win32api.EnumDisplaySettings(deviceName, win32con.ENUM_CURRENT_SETTINGS)
+    devmode.DisplayFrequency = refresh_rate
+    result = win32api.ChangeDisplaySettingsEx(deviceName, devmode)
+    
+    if result == win32con.DISP_CHANGE_SUCCESSFUL:
+        print("Display refresh rate changed successfully.")
+    else:
+        print("Failed to change display refresh rate.")
+    # else:
+    #     print("No valid display device found.")
 
 
 def setHz(HzX, HzY):
@@ -35,26 +52,26 @@ def setHz(HzX, HzY):
     pyautogui.click(936, 613)
 
 
-choice = input("Whitch Herz do you want to set? : 75Hz = a or 165Hz = d?")
+while True:
+    choice = input("Whitch Herz do you want to set? : 75Hz = a or 165Hz = d?")
+    if choice == "d":  # 165Hz
+        # setHz(1504, 528)
+        # time.sleep(1)
+        # keyboard.press_and_release("alt+F4")
+        setHz02(165)
 
-while choice != "a" and choice != "d" and choice != "s" and choice != "q":
-        print("Please enter a valid input!")
-        choice = input("Whitch Herz do you want to set? : 75Hz = a or 165Hz = d?")
+    elif choice == "a":  # 75Hz
+        # setHz(1493, 742)
+        # time.sleep(1)
+        # keyboard.press_and_release("alt+F4")
+        setHz02(75)
 
-if choice == "d": # 165Hz
-    setHz(1504, 528)
-    time.sleep(1)
-    keyboard.press_and_release("alt+F4")
-    exit()
+    elif choice == "s":
+        getHzStatus()
 
-elif choice == "a": # 75Hz
-    setHz(1493, 742)
-    time.sleep(1)
-    keyboard.press_and_release("alt+F4")
-    exit()
+    elif choice == "q":
+        exit()
 
-elif choice == "s":
-    getHzStatus()
-
-elif choice == "q":
-    exit()
+    else:
+        print("Please enter a valid input! (a or d) or (s) or (q)")
+        continue
