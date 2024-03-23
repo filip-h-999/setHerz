@@ -14,16 +14,17 @@ import win32con
 # coordinatesHz75 = X: 1470, Y: 634 / 1493, Y: 742
 # keepChanges = X: 936, Y: 613
 
-deviceName = r"\\.\DISPLAY2"
 
-def getHzStatus():
+def getHzStatus(displayNum):
+    deviceName = win32api.EnumDisplayDevices(None, displayNum).DeviceName
+    # print(device.DeviceName)
     settings = win32api.EnumDisplaySettings(deviceName, -1)
     refresh_rate = settings.DisplayFrequency
     print(f"Current Refresh Rate: {refresh_rate}Hz")
 
 
-def setHz02(refresh_rate):
-    # device = win32api.EnumDisplayDevices(None, 0)
+def setHz02(refresh_rate, deiplayNum):
+    deviceName = win32api.EnumDisplayDevices(None, deiplayNum).DeviceName
     # print(device.DeviceName)
     # if device.DeviceName:
     devmode = win32api.EnumDisplaySettings(deviceName, win32con.ENUM_CURRENT_SETTINGS)
@@ -53,21 +54,21 @@ def setHz(HzX, HzY):
 
 
 while True:
-    choice = input("Whitch Herz do you want to set? : 75Hz = a or 165Hz = d?")
+    choice = input("Whitch Herz do you want to set? : 75Hz = a or 165Hz = d?\n")
     if choice == "d":  # 165Hz
         # setHz(1504, 528)
         # time.sleep(1)
         # keyboard.press_and_release("alt+F4")
-        setHz02(165)
+        setHz02(165,1)
 
     elif choice == "a":  # 75Hz
         # setHz(1493, 742)
         # time.sleep(1)
         # keyboard.press_and_release("alt+F4")
-        setHz02(75)
+        setHz02(75,1)
 
     elif choice == "s":
-        getHzStatus()
+        getHzStatus(1)
 
     elif choice == "q":
         exit()
