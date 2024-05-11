@@ -27,6 +27,12 @@ def window():
     name.place(relx=0.313, rely=0.025)
 
     displays()
+    brightness()
+    text()
+
+    nextSite()
+    firstSite()
+    dropdown()
     app.mainloop()
 
 
@@ -37,7 +43,37 @@ def displays():
     display.place(relx=0.10, rely=0.25)
 
 
+def brightness():
+    varInt = customtkinter.IntVar()
+    brightness = customtkinter.CTkSlider(master=app, from_=0, to=100, orientation="horizontal", width=250, variable=varInt)
+    brightness.place(relx=0.25, rely=0.50 + 0.12)
 
+    text = customtkinter.CTkLabel(master=app, textvariable=varInt, width=30)
+    text.place(relx=0.80, rely=0.48 + 0.12)
+
+
+def text():
+    text = customtkinter.CTkLabel(master=app, text="Brightness:", width=30)
+    text.place(relx=0.10, rely=0.60)
+
+
+def nextSite():
+    btn = customtkinter.CTkButton(
+        master=app, text=">", width=40, height=15, command=nextSite
+    )
+    btn.place(relx=0.86, rely=0.87)
+
+
+def firstSite():
+    btn = customtkinter.CTkButton(
+        master=app, text="<", width=40, height=15, command=nextSite
+    )
+    btn.place(relx=0.75, rely=0.87)
+
+
+def dropdown():
+    dropdown = customtkinter.CTkComboBox(master=app, values=monitors)
+    dropdown.place(relx=0.09, rely=0.45)
 
 
 # print(sbc.get_brightness(display=0)) #display=0 is left
