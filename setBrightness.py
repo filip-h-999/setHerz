@@ -16,6 +16,27 @@ def get_MonitorsAndBrightness():
     return monitors
 
 
+def window():
+    app.title("Brightness contro")
+    app.geometry("460x277")
+    app.resizable(False, False)
+
+    name = customtkinter.CTkLabel(
+        master=app, text="Brightness contro", font=("Arial", 20, "bold")
+    )
+    name.place(relx=0.313, rely=0.025)
+
+    displays()
+    app.mainloop()
+
+
+def displays():
+    display = customtkinter.CTkLabel(
+        master=app, text="".join(get_MonitorsAndBrightness()), font=("Arial", 13)
+    )
+    display.place(relx=0.10, rely=0.25)
+
+
 
 
 
