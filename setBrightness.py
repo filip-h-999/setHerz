@@ -8,6 +8,15 @@ customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-bl
 app = customtkinter.CTk()
 
 monitors = []
+brightnessList = []
+
+
+for monitor in sbc.list_monitors():
+    brightness = sbc.get_brightness(monitor)
+    if isinstance(brightness, list) and len(brightness) > 0:
+        brightnessList.append(str(brightness[0]))
+    else:
+        brightnessList.append(str(brightness))
 
 
 def get_MonitorsAndBrightness():
@@ -28,12 +37,12 @@ def window():
     name.place(relx=0.313, rely=0.025)
 
     displays()
-    brightness()
     text()
-
     nextSite()
     firstSite()
     dropdown()
+    updateDropdownIndex()
+    brightness()
     app.mainloop()
 
 
@@ -44,9 +53,10 @@ def displays():
     display.place(relx=0.10, rely=0.25)
 
 
+varInt = customtkinter.IntVar()
+
 def brightness():
     global monitor_index
-    varInt = customtkinter.IntVar()
     brightness = customtkinter.CTkSlider(
         master=app,
         from_=0,
@@ -60,6 +70,15 @@ def brightness():
 
     text = customtkinter.CTkLabel(master=app, textvariable=varInt, width=30)
     text.place(relx=0.80, rely=0.48 + 0.12)
+
+
+def m():
+    if monitor_index == 0:
+        varInt.set(brightnessList[0])
+        print(brightnessList[0])
+    elif monitor_index == 1:
+        varInt.set(brightnessList[1])
+        print(brightnessList[1])
 
 
 def text():
@@ -85,8 +104,8 @@ def updateDropdownIndex(event=None):
     global monitor_index
     selected_monitor = dropdownBox.get()
     monitor_index = monitors.index(selected_monitor)
-    print(monitor_index)
-
+    # print(monitor_index)
+    m()
 
 def dropdown():
     global dropdownBox
