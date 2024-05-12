@@ -9,6 +9,7 @@ app = customtkinter.CTk()
 
 monitors = []
 
+
 def get_MonitorsAndBrightness():
     for monitor in sbc.list_monitors():
         monitors.append(str(monitor) + ": " + str(sbc.get_brightness(monitor)) + "    ")
@@ -44,8 +45,17 @@ def displays():
 
 
 def brightness():
+    global monitor_index
     varInt = customtkinter.IntVar()
-    brightness = customtkinter.CTkSlider(master=app, from_=0, to=100, orientation="horizontal", width=250, variable=varInt)
+    brightness = customtkinter.CTkSlider(
+        master=app,
+        from_=0,
+        to=100,
+        orientation="horizontal",
+        width=250,
+        variable=varInt,
+        command=lambda x: sbc.set_brightness(int(x), monitor_index),
+    )
     brightness.place(relx=0.25, rely=0.50 + 0.12)
 
     text = customtkinter.CTkLabel(master=app, textvariable=varInt, width=30)
@@ -66,14 +76,24 @@ def nextSite():
 
 def firstSite():
     btn = customtkinter.CTkButton(
-        master=app, text="<", width=40, height=15, command=nextSite
+        master=app, text="<", width=40, height=15, command=firstSite
     )
     btn.place(relx=0.75, rely=0.87)
 
 
+def updateDropdownIndex(event=None):
+    global monitor_index
+    selected_monitor = dropdownBox.get()
+    monitor_index = monitors.index(selected_monitor)
+    print(monitor_index)
+
+
 def dropdown():
-    dropdown = customtkinter.CTkComboBox(master=app, values=monitors)
-    dropdown.place(relx=0.09, rely=0.45)
+    global dropdownBox
+    dropdownBox = customtkinter.CTkComboBox(
+        master=app, values=monitors, command=updateDropdownIndex
+    )
+    dropdownBox.place(relx=0.09, rely=0.45)
 
 
 # print(sbc.get_brightness(display=0)) #display=0 is left
